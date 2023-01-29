@@ -10,7 +10,7 @@ const roboto = Roboto({weight: "400", subsets: ["latin"]})
 const mono = Share_Tech_Mono({weight: "400", subsets: ["latin"]});
 
 export default function Home() {
-    const inputRef = useRef<HTMLTextAreaElement>();
+    const inputRef = useRef<HTMLTextAreaElement>(null);
     const [input, setInput] = useState("");
     const [loading, setLoading] = useState(false);
     const [gptResponse, setGptResponse] = useState("");
