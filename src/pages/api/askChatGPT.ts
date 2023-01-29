@@ -1,5 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type {NextApiRequest, NextApiResponse} from 'next'
+import axios from "axios";
 
 const MODEL = {
     best: "text-davinci-003",
@@ -25,14 +26,14 @@ export default async function handler(
     }
 
     // Check if input is not against openai's policies
-    const prohibited = await flagged(req.body.text);
-
-    if (prohibited) {
-        res.status(200).json({
-            response: "Your input seems to violate OpenAI's policies."
-        });
-        return;
-    }
+    // const prohibited = await flagged(req.body.text);
+    //
+    // if (prohibited) {
+    //     res.status(200).json({
+    //         response: "Your input seems to violate OpenAI's policies."
+    //     });
+    //     return;
+    // }
 
     const response = await askChatGPT(req.body.text);
 
@@ -61,19 +62,22 @@ async function askChatGPT(prompt: string) {
 }
 
 async function flagged(input: string) {
-    const response = await fetch("https://chatgpt.kyrill.dev/api/moderation", {
+    let violation = false;
+
+    const data = await axios("https://api.openai.com/v1/moderations",{
         method: "POST",
         headers: {
             "Content-Type": "application/json",
+            "Authorization": "Bearer " + process.env.OPENAI_API_KEY
         },
-        body: JSON.stringify({
-            text: input
-        })
+        data: {
+            input: input
+        }
     });
 
-    const moderation = await response.json();
+    if (data.status === 200){
+        violation = data.data.results[0].flagged;
+    }
 
-    console.log(moderation);
-
-    return moderation.flagged;
+    return violation;
 }
