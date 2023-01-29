@@ -61,7 +61,7 @@ async function askChatGPT(prompt: string) {
 }
 
 async function flagged(input: string) {
-    const response = await fetch("http://localhost:3000/api/moderation", {
+    const response = await fetch("https://chatgpt.kyrill.dev/api/moderation", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
