@@ -73,5 +73,7 @@ async function flagged(input: string) {
 
     const moderation = await response.json();
 
+    console.log(moderation);
+
     return moderation.flagged;
 }

@@ -64,7 +64,7 @@ export default function Home() {
             <main className={"flex flex-col justify-center items-center pt-44 " + roboto.className}>
                 <div className="flex flex-col items-start w-fit gap-4">
                     <div className="flex flex-row gap-3 w-96">
-                        <textarea placeholder={"ask something ..."} contentEditable={true} onChange={e => setInput(e.target.value)} ref={inputRef} className="text-3xl h-[10vh] outline-none"/>
+                        <textarea placeholder={"ask something ..."} onChange={e => setInput(e.target.value)} ref={inputRef} className="text-3xl h-[10vh] outline-none"/>
                     </div>
                     <p className={"text-2xl text-gray-600 w-96 " + mono.className}>{text}</p>
                 </div>
