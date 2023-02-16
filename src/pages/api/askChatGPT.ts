@@ -42,7 +42,7 @@ async function askChatGPT(prompt: string) {
         model: MODEL.best,
         prompt: prompt,
         temperature: 0,
-        max_tokens: 100,
+        max_tokens: 4000,
     });
 
     if (response.status === 200)

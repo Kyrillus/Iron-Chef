@@ -11,7 +11,7 @@ function SliderTimer({timer ,setTimer}: any) {
     }
 
     return (
-        <Box className="px-10 md:px-6" pt={6} pb={2}>
+        <Box px={10} pt={6} pb={2}>
             <Slider defaultValue={60} min={10} max={240} className={colorMode === 'dark' ? 'text-purple-100' : 'text-purple-900'} aria-label='slider-ex-6' onChange={(val) => {
                 setTimer(val)
             }}>

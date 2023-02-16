@@ -1,15 +1,14 @@
 import Head from 'next/head'
 import React, {useEffect, useRef, useState} from "react";
-import { useWindupString } from "windups";
-import { ImSpinner8 } from 'react-icons/im';
 
-import axios from "axios";
+
 import Navbar from "@/components/Navbar";
 import Module from "@/components/Module";
 
 
 export default function Home() {
     const [ingredients, setIngredients] = useState<string[]>();
+
     useEffect(() => {
         const loadData = async () => {
             const response = await fetch('/ingredients.csv');
@@ -21,21 +20,6 @@ export default function Home() {
         }
         loadData();
     }, []);
-    const inputRef = useRef<HTMLTextAreaElement>(null);
-    const [input, setInput] = useState("");
-    const [loading, setLoading] = useState(false);
-    const [gptResponse, setGptResponse] = useState("");
-
-    const submit = async () => {
-        setLoading(true);
-        try {
-            const response = await axios.post('/api/askChatGPT', {text: input});
-            setGptResponse(response.data.response);
-        } catch (error) {
-            setGptResponse("Oops ... something went wrong");
-        }
-        setLoading(false);
-    }
 
     return (
         <>
@@ -48,7 +32,7 @@ export default function Home() {
             {/*
               <textarea placeholder={"ask something ..."} onChange={e => setInput(e.target.value)} ref={inputRef} className="text-3xl h-[10vh] outline-none"/>
               */}
-            <main className="font-main ">
+            <main className="font-main overflow-x-hidden">
                 <Navbar/>
                 {ingredients && <Module ingredients={ingredients}/>}
             </main>
