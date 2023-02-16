@@ -9,21 +9,22 @@ import Module from "@/components/Module";
 
 
 export default function Home() {
+    const [ingredients, setIngredients] = useState<string[]>();
+    useEffect(() => {
+        const loadData = async () => {
+            const response = await fetch('/ingredients.csv');
+            const reader = response.body?.getReader();
+            const result = await reader?.read() // raw array
+            const decoder = new TextDecoder('utf-8')
+            const csv = decoder.decode(result?.value) // the csv text
+            setIngredients(csv.split('\r\n').map(ingr => ingr.replaceAll('"', '')));
+        }
+        loadData();
+    }, []);
     const inputRef = useRef<HTMLTextAreaElement>(null);
     const [input, setInput] = useState("");
     const [loading, setLoading] = useState(false);
     const [gptResponse, setGptResponse] = useState("");
-    const [text] = useWindupString(
-        gptResponse,
-        {
-            pace: (char) => (char === " " ? 30 : 50)
-        }
-    );
-
-    useEffect(() => {
-        inputRef.current?.focus();
-
-    }, []);
 
     const submit = async () => {
         setLoading(true);
@@ -49,7 +50,7 @@ export default function Home() {
               */}
             <main className="font-main ">
                 <Navbar/>
-                <Module/>
+                {ingredients && <Module ingredients={ingredients}/>}
             </main>
         </>
     )
