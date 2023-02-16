@@ -17,7 +17,7 @@ export default function Home() {
             const result = await reader?.read() // raw array
             const decoder = new TextDecoder('utf-8')
             const csv = decoder.decode(result?.value) // the csv text
-            setIngredients(csv.split('\r\n').map(ingr => ingr.replaceAll('"', '')));
+            setIngredients(csv.split('\n').map(ingr => ingr.replaceAll('"', '')));
         }
         loadData();
     }, []);
