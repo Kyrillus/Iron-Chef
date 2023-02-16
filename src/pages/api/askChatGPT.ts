@@ -1,5 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type {NextApiRequest, NextApiResponse} from 'next'
+import axios from "axios";
 
 const MODEL = {
     best: "text-davinci-003",
@@ -41,7 +42,7 @@ async function askChatGPT(prompt: string) {
         model: MODEL.strong,
         prompt: prompt,
         temperature: 0,
-        max_tokens: 2400,
+        max_tokens: 1500,
     });
 
     if (response.status === 200)
