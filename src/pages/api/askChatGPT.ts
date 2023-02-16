@@ -25,16 +25,6 @@ export default async function handler(
         return;
     }
 
-    // Check if input is not against openai's policies
-    // const prohibited = await flagged(req.body.text);
-    //
-    // if (prohibited) {
-    //     res.status(200).json({
-    //         response: "Your input seems to violate OpenAI's policies."
-    //     });
-    //     return;
-    // }
-
     const response = await askChatGPT(req.body.text);
 
     res.status(200).json({
@@ -52,32 +42,11 @@ async function askChatGPT(prompt: string) {
         model: MODEL.best,
         prompt: prompt,
         temperature: 0,
-        max_tokens: 100,
+        max_tokens: 4000,
     });
 
     if (response.status === 200)
         return response.data.choices[0].text;
     else
         return "Error fetching ...";
-}
-
-async function flagged(input: string) {
-    let violation = false;
-
-    const data = await axios("https://api.openai.com/v1/moderations",{
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": "Bearer " + process.env.OPENAI_API_KEY
-        },
-        data: {
-            input: input
-        }
-    });
-
-    if (data.status === 200){
-        violation = data.data.results[0].flagged;
-    }
-
-    return violation;
 }
