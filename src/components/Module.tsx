@@ -39,7 +39,7 @@ function Module(props: { ingredients: string[] }) {
         try {
             const response = await axios.post('/api/askChatGPT',
                 {
-                    text: "I want to cook a meal! I have following ingredients at home: " + selectedIngredients?.join(", ") + " ." +
+                    text: "I want to cook a meal. Please give me a detailed recipe! I have following ingredients at home: " + selectedIngredients?.join(", ") + " ." +
                         (oven || stove || microwave || blender ? ("I only have following tools at home: " + (oven ? 'oven' : '') + ", " + (microwave ? 'microwave' : '') + ", " + (blender ? 'blender' : '') + ", " + (stove ? 'stove' : '') + ".") : 'I dont have any tools at home like oven, stove, ect.') +
                         "I have " + sliderValue + " minutes time to cook this meal. " +
                         (vegetarian || keto || lowfat ? ("Following preferences have to be considered: " + (vegetarian ? 'vegetarian, ' : '') + (keto ? 'keto, ' : '') + (lowfat ? 'low fat, ' : '')) : '')
