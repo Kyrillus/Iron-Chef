@@ -110,7 +110,7 @@ function Module(props: { ingredients: string[] }) {
                     <ModalHeader>Your recipe is ready!</ModalHeader>
                     <ModalCloseButton/>
                     <ModalBody>
-                        <p>{gptResponse}</p>
+                        <span className="whitespace-pre-line">{gptResponse}</span>
                     </ModalBody>
 
                     <ModalFooter>
