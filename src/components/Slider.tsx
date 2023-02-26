@@ -31,7 +31,7 @@ function SliderTimer({timer ,setTimer}: any) {
                     bg='purple.500'
                     color='white'
                     mt='-10'
-                    ml='-5'
+                    ml='-10'
                     w='20'
                 >
                     <span>{timer} min</span>
