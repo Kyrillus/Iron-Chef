@@ -39,7 +39,7 @@ async function askChatGPT(prompt: string) {
     });
     const openai = new OpenAIApi(configuration);
     const response = await openai.createCompletion({
-        model: MODEL.strong,
+        model: MODEL.best,
         prompt: prompt,
         temperature: 0,
         max_tokens: 1500,
