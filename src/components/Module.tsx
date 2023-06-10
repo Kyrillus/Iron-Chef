@@ -1,7 +1,8 @@
 import React, {useState} from 'react';
 import Autocomplete from "@/components/Autocomplete";
 import SliderTimer from "@/components/Slider";
-import {Button, Checkbox, Switch, useDisclosure} from "@chakra-ui/react";
+import { alertAnatomy } from '@chakra-ui/anatomy';
+import {Button, Checkbox, Switch, createMultiStyleConfigHelpers, useDisclosure, useToast} from "@chakra-ui/react";
 import {
     Modal,
     ModalBody,
@@ -31,16 +32,21 @@ function Module(props: { ingredients: string[] }) {
     const [keto, setKeto] = useState(false);
     const [lowfat, setLowFat] = useState(false);
 
+    const { definePartsStyle, defineMultiStyleConfig } =
+        createMultiStyleConfigHelpers(alertAnatomy.keys);
+
     const {isOpen, onOpen, onClose} = useDisclosure()
+    const toast = useToast();
     const finalRef = React.useRef(null)
 
-    const prompt = async () => {
+    const prompt = async (e: any) => {
+        e.preventDefault();
         setLoading(true);
         try {
             const response = await axios.post('/api/askChatGPT',
                 {
                     text: "I want to cook a meal. Please give me a detailed recipe! I have following ingredients at home: " + selectedIngredients?.join(", ") + " ." +
-                        (oven || stove || microwave || blender ? ("I only have following tools at home: " + (oven ? 'oven' : '') + ", " + (microwave ? 'microwave' : '') + ", " + (blender ? 'blender' : '') + ", " + (stove ? 'stove' : '') + ".") : 'I dont have any tools at home like oven, stove, ect.') +
+                        (oven || stove || microwave || blender ? ("I only have following tools at home: " + (oven ? 'oven' : '') + ", " + (microwave ? 'microwave' : '') + ", " + (blender ? 'blender' : '') + ", " + (stove ? 'stove' : '') + ".") : 'I dont have any tools at home like oven, stove, ect. ') +
                         "I have " + sliderValue + " minutes time to cook this meal. " +
                         (vegetarian || keto || lowfat ? ("Following preferences have to be considered: " + (vegetarian ? 'vegetarian, ' : '') + (keto ? 'keto, ' : '') + (lowfat ? 'low fat, ' : '')) : '')
                 });
@@ -53,8 +59,40 @@ function Module(props: { ingredients: string[] }) {
         onOpen();
     }
 
+    function shareRecipe() {
+        navigator.share({
+            title: 'Iron Chef AI',
+            text: gptResponse.trim(),
+            url: 'https://ironchef.kyrill.us/',
+        }).catch((error) => console.log('Error sharing', error));
+    }
+    const customError = definePartsStyle({
+        container: {
+            background: 'purple.200',
+            _dark: {
+                background: 'purple.200',
+            },
+        },
+    });
+    function copyRecipe() {
+        navigator.clipboard
+            .writeText(gptResponse.trim())
+            .then(() => toast({
+                title: 'Copied to clipboard!',
+                description: "Enjoy your meal! 🍽️",
+                status: 'success',
+                position: "top-right",
+                duration: 5000,
+                containerStyle: {
+                    borderRadius: '10px',
+                    bgColor: 'purple.200'
+                },
+                isClosable: true,
+            }));
+    }
+
     return (
-        <div className="flex justify-center gap-16 flex-col items-center py-12 select-none">
+        <form onSubmit={prompt} className="flex justify-center gap-16 flex-col items-center py-12 select-none">
             <div className="flex flex-col gap-4 px-8 w-full md:w-3/5 max-w-2xl">
                 <h1 className="font-semibold text-lg">Which ingredients do you have at home?</h1>
                 <Autocomplete setItems={setSelectedIngredients} items={[...new Set(props.ingredients)]}
@@ -99,26 +137,27 @@ function Module(props: { ingredients: string[] }) {
                 </div>
             </div>
             <div className="flex flex-col px-8 gap-12 justify-center w-full md:w-3/5 max-w-2xl">
-                <Button onClick={prompt} colorScheme='purple' size='lg'>
+                <Button type={"submit"} colorScheme='purple' size='lg'>
                     {loading ? (<ImSpinner8 className="animate-spin"/>) : ('Generate Meal 🥣')}
                 </Button>
             </div>
 
             <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>
-                <ModalOverlay />
+                <ModalOverlay/>
                 <ModalContent>
                     <ModalHeader>Your recipe is ready!</ModalHeader>
                     <ModalCloseButton/>
                     <ModalBody>
-                        <span className="whitespace-pre-line">{gptResponse}</span>
+                        <span className="whitespace-pre-line">{gptResponse.trim()}</span>
                     </ModalBody>
 
                     <ModalFooter>
-                        <Button onClick={onClose} colorScheme='blue' variant='ghost'>Share Recipe!</Button>
+                        <Button onClick={copyRecipe} colorScheme='blue' variant='ghost'>Copy</Button>
+                        <Button hidden={!navigator.share} onClick={shareRecipe} colorScheme='blue' variant='ghost'>Share Recipe!</Button>
                     </ModalFooter>
                 </ModalContent>
             </Modal>
-        </div>
+        </form>
     );
 }
 

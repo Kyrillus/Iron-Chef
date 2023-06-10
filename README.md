@@ -1,1 +1,1 @@
-just playing around with OpenAI's API 🌚
+your personal, AI-enhanced Iron-Chef 👩‍🍳

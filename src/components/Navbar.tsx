@@ -12,9 +12,8 @@ function Navbar() {
             <div className="flex flex-row justify-between px-5 md:px-24 w-full">
                 {/* Left */}
                 <div className="flex flex-col select-none">
-                    <p className="font-bold text-2xl">SPACELESS <span className="text-purple-400">AI</span></p>
-                    <p className={"text-left font-[500] " + (colorMode === "dark" ? "text-white" : "text-gray-800")}>Chef
-                        Edition 🍴</p>
+                    <p className="font-bold text-2xl">IRON <span className="text-purple-400">CHEF</span></p>
+                    <p className={"text-left text-sm font-[500] " + (colorMode === "dark" ? "text-white" : "text-gray-700")}>Your personal cooking assistant.</p>
                 </div>
                 {/* Right */}
                 <div className=" p-2 h-fit w-fit mt-1.5">

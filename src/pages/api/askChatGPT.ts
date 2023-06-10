@@ -1,9 +1,11 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type {NextApiRequest, NextApiResponse} from 'next'
 import axios from "axios";
+import * as process from "process";
 
 const MODEL = {
-    best: "text-davinci-003",
+    best: "gpt-3.5-turbo",
+    very_strong: "text-davinci-003",
     strong: "text-curie-001",
     medium: "text-babbage-001",
     weak: "text-ada-001"
@@ -39,10 +41,10 @@ async function askChatGPT(prompt: string) {
     });
     const openai = new OpenAIApi(configuration);
     const response = await openai.createCompletion({
-        model: MODEL.strong,
+        model: MODEL.very_strong,
         prompt: prompt,
         temperature: 0,
-        max_tokens: 1500,
+        max_tokens: 2000,
     });
 
     if (response.status === 200)
