@@ -2,8 +2,6 @@
 import type {NextApiRequest, NextApiResponse} from 'next'
 
 const MODEL = {
-    best: "gpt-4",
-    very_strong: "gpt-3.5-turbo",
     strong: "text-davinci-003",
     medium: "text-curie-001",
     weak: "text-babbage-001"
@@ -39,7 +37,7 @@ async function askChatGPT(prompt: string) {
     });
     const openai = new OpenAIApi(configuration);
     const response = await openai.createCompletion({
-        model: MODEL.very_strong,
+        model: MODEL.strong,
         prompt: prompt,
         temperature: 0,
         max_tokens: 2000,

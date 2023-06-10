@@ -35,8 +35,7 @@ function Module(props: { ingredients: string[] }) {
     const toast = useToast();
     const finalRef = React.useRef(null)
 
-    const prompt = async (e: any) => {
-        e.preventDefault();
+    const prompt = async () => {
         if (selectedIngredients === undefined || selectedIngredients?.length === 0) {
             toast({
                 title: "No ingredients selected",
@@ -52,7 +51,7 @@ function Module(props: { ingredients: string[] }) {
         try {
             const response = await axios.post('/api/askChatGPT',
                 {
-                    text: "I want to cook a meal. Please give me a detailed recipe! I have following ingredients at home: " + selectedIngredients?.join(", ") + " ." +
+                    text: "I want to cook a meal. Please give me a detailed recipe! I have only have following ingredients at home: " + selectedIngredients?.join(", ") + " ." +
                         (oven || stove || microwave || blender ? ("I only have following tools at home: " + (oven ? 'oven' : '') + ", " + (microwave ? 'microwave' : '') + ", " + (blender ? 'blender' : '') + ", " + (stove ? 'stove' : '') + ".") : 'I dont have any tools at home like oven, stove, ect. ') +
                         "I have " + sliderValue + " minutes time to cook this meal. " +
                         (vegetarian || keto || lowfat ? ("Following preferences have to be considered: " + (vegetarian ? 'vegetarian, ' : '') + (keto ? 'keto, ' : '') + (lowfat ? 'low fat, ' : '')) : '')
@@ -91,7 +90,7 @@ function Module(props: { ingredients: string[] }) {
     }
 
     return (
-        <form onSubmit={prompt} className="flex justify-center gap-16 flex-col items-center py-12 select-none">
+        <div className="flex justify-center gap-16 flex-col items-center py-12 select-none">
             <div className="flex flex-col gap-4 px-8 w-full md:w-3/5 max-w-2xl">
                 <h1 className="font-semibold text-lg">Which ingredients do you have at home?</h1>
                 <Autocomplete setItems={setSelectedIngredients} items={[...new Set(props.ingredients)]}
@@ -136,7 +135,7 @@ function Module(props: { ingredients: string[] }) {
                 </div>
             </div>
             <div className="flex flex-col px-8 gap-12 justify-center w-full md:w-3/5 max-w-2xl">
-                <Button type={"submit"} colorScheme='purple' size='lg'>
+                <Button onClick={prompt} colorScheme='purple' size='lg'>
                     {loading ? (<ImSpinner8 className="animate-spin"/>) : ('Generate Meal 🥣')}
                 </Button>
             </div>
@@ -156,7 +155,7 @@ function Module(props: { ingredients: string[] }) {
                     </ModalFooter>
                 </ModalContent>
             </Modal>
-        </form>
+        </div>
     );
 }
 
