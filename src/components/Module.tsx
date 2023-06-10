@@ -151,7 +151,7 @@ function Module(props: { ingredients: string[] }) {
 
                     <ModalFooter>
                         <Button onClick={copyRecipe} colorScheme='blue' variant='ghost'>Copy</Button>
-                        <Button hidden={!navigator.share} onClick={shareRecipe} colorScheme='blue' variant='ghost'>Share Recipe!</Button>
+                        <Button hidden={!navigator.share ||! navigator.canShare} onClick={shareRecipe} colorScheme='blue' variant='ghost'>Share Recipe!</Button>
                     </ModalFooter>
                 </ModalContent>
             </Modal>
