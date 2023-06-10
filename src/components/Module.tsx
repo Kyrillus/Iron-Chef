@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import Autocomplete from "@/components/Autocomplete";
 import SliderTimer from "@/components/Slider";
-import { alertAnatomy } from '@chakra-ui/anatomy';
 import {Button, Checkbox, Switch, createMultiStyleConfigHelpers, useDisclosure, useToast} from "@chakra-ui/react";
 import {
     Modal,
@@ -32,15 +31,23 @@ function Module(props: { ingredients: string[] }) {
     const [keto, setKeto] = useState(false);
     const [lowfat, setLowFat] = useState(false);
 
-    const { definePartsStyle, defineMultiStyleConfig } =
-        createMultiStyleConfigHelpers(alertAnatomy.keys);
-
     const {isOpen, onOpen, onClose} = useDisclosure()
     const toast = useToast();
     const finalRef = React.useRef(null)
 
     const prompt = async (e: any) => {
         e.preventDefault();
+        if (selectedIngredients === undefined || selectedIngredients?.length === 0) {
+            toast({
+                title: "No ingredients selected",
+                description: "Please select at least one ingredient",
+                position: "top-right",
+                status: "error",
+                duration: 9000,
+                isClosable: true,
+            })
+            return;
+        }
         setLoading(true);
         try {
             const response = await axios.post('/api/askChatGPT',
@@ -66,26 +73,18 @@ function Module(props: { ingredients: string[] }) {
             url: 'https://ironchef.kyrill.us/',
         }).catch((error) => console.log('Error sharing', error));
     }
-    const customError = definePartsStyle({
-        container: {
-            background: 'purple.200',
-            _dark: {
-                background: 'purple.200',
-            },
-        },
-    });
+
     function copyRecipe() {
         navigator.clipboard
             .writeText(gptResponse.trim())
             .then(() => toast({
                 title: 'Copied to clipboard!',
-                description: "Enjoy your meal! 🍽️",
+                description: "Enjoy your meal 🍽️",
                 status: 'success',
                 position: "top-right",
                 duration: 5000,
                 containerStyle: {
                     borderRadius: '10px',
-                    bgColor: 'purple.200'
                 },
                 isClosable: true,
             }));

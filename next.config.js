@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    env: {
+    serverRuntimeConfig: {
         OPENAI_API_KEY: process.env.OPENAI_API_KEY,
     },
     reactStrictMode: true,

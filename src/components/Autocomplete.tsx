@@ -9,7 +9,7 @@ import {
 
 interface autoCompleteProps {
     items: string[],
-    placeholder: string
+    placeholder: string,
     setItems: Dispatch<SetStateAction<string[] | undefined>>
 }
 
