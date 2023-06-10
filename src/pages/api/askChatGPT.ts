@@ -37,10 +37,10 @@ async function askChatGPT(prompt: string) {
     });
     const openai = new OpenAIApi(configuration);
     const response = await openai.createCompletion({
-        model: MODEL.strong,
+        model: MODEL.medium,
         prompt: prompt,
         temperature: 0,
-        max_tokens: 2000,
+        max_tokens: 1800,
     });
     if (response.status === 200)
         return response.data.choices[0].text;
