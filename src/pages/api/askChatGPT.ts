@@ -3,7 +3,7 @@ import type {NextApiRequest, NextApiResponse} from 'next'
 
 const MODEL = {
     strong: "text-davinci-003",
-    medium: "text-curie-001",
+    medium: "text-davinci-002",
     weak: "text-babbage-001"
 }
 
@@ -40,7 +40,7 @@ async function askChatGPT(prompt: string) {
         model: MODEL.medium,
         prompt: prompt,
         temperature: 0,
-        max_tokens: 1800,
+        max_tokens: 1500,
     });
     if (response.status === 200)
         return response.data.choices[0].text;
